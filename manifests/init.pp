@@ -4,10 +4,6 @@
 #
 # === Parameters
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
 # === Examples
 #
 #  class { etcd: }
@@ -16,6 +12,14 @@
 #
 # Kyle Anderson <kyle@xkyle.com>
 #
-class etcd {
+class etcd (
+
+) inherits etcd::params {
+
+  anchor { 'etcd::begin': } ->
+  class  { '::etcd::install': } ->
+  class  { '::etcd::config': } ~>
+  class  { '::etcd::service': } ->
+  anchor { 'etcd::end': }
 
 }

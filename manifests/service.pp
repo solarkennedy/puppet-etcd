@@ -1,0 +1,2 @@
+class etcd::service {
+}
