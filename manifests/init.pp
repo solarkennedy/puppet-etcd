@@ -13,7 +13,9 @@
 # Kyle Anderson <kyle@xkyle.com>
 #
 class etcd (
-
+  $service_ensure = running,
+  $service_enable = true,
+  $package_ensure = installed,
 ) inherits etcd::params {
 
   anchor { 'etcd::begin': } ->

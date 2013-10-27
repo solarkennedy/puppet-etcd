@@ -1,0 +1,12 @@
+# etcd - distributed configuration daemon
+#
+# Maintained by Puppet. Do not edit by hand. 
+#
+description	"distributed configuration daemon"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+
+exec etcd
