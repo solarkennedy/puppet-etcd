@@ -22,7 +22,7 @@ class etcd (
   $node_name       = $::fqdn,
   $user            = 'puppet',
   $storage_dir     = '/var/lib/etcd/',
-  $cluster_members = [],
+  $cluster_members = [ '127.0.0.1:7001' ],
 ) inherits etcd::params {
 
   anchor { 'etcd::begin': } ->

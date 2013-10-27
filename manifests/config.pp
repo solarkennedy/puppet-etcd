@@ -1,4 +1,8 @@
-class etcd::config {
+class etcd::config inherits etcd {
+
+  validate_array($cluster_members)
+
+  $cluster_list = join($cluster_members, ',')
 
   file { '/etc/init/etcd.conf':
     ensure  => file,
