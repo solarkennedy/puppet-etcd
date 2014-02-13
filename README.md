@@ -2,23 +2,30 @@ About
 ------
 [![Build Status](https://travis-ci.org/solarkennedy/puppet-etcd.png)](https://travis-ci.org/solarkennedy/puppet-etcd)
 
-This puppet module installs and configures etcd
+This puppet module installs and configures etcd.
+
+WARNING: This module is totally untested. (except for unit tests)
 
 Examples
 ---------
-Simplest invocation, installs etcd via packages and makes sure it runs on localhost:
+Simplest invocation, installs etcd via packages, manages a user, puts data in 
+`/var/lib/etcd/` and makes sure it runs on localhost:
 
     class { 'etcd': }
 
-Explicity set the cluster members:
+Parameters
+----------
+This module is in flux. See init.pp for all parameters and their defaults.
 
-    class { 'etcd':
-      cluster_members => [ 'server1:7001', 'server2:7001', 'server3:7001' ]
-    }
+Upstart
+---------
+Etcd doesn't really include an init script, so this provides a basic one for
+for upstart-enabled distros. Pull requests welcome to improve this.
 
 Requirements
 -----------
-It assumes you have a package available called etcd. If you don't have one [go make one](https://github.com/solarkennedy/etcd-packages)
+It assumes you have a package available called etcd. If you don't have one
+[go make one](https://github.com/solarkennedy/etcd-packages)
 
 Contact
 -------
