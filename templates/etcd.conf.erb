@@ -1,15 +1,24 @@
-# etcd - distributed configuration daemon
-#
-# Maintained by Puppet. Do not edit by hand. 
-#
-description	"distributed configuration daemon"
+addr = "<%= @addr -%>"
+bind_addr = "<%= @bind_addr -%>"
+ca_file = "<%= @ca_file -%>"
+cert_file = "<%= @cert_file -%>"
+cors = <%= @cors -%>
+cpu_profile_file = "<%= @cpu_profile_file -%>"
+data_dir = "<%= @data_dir -%>"
+key_file = "<%= @key_file -%>"
+peers = <%= @peers -%>
+peers_file = "<%= @peers_file -%>"
+max_cluster_size = <%= @max_cluster_size -%>
+max_result_buffer = <%= @max_result_buffer -%>
+max_retry_attempts = <%= @max_retry_attempts -%>
+name = "<%= @node_name -%>"
+snapshot = <%= @snapshot -%>
+verbose = <%= @verbose -%>
+very_verbose = <%= @very_verbose -%>
 
-start on runlevel [2345]
-stop on runlevel [!2345]
-
-respawn
-
-# Official way to run as a different user:
-# http://upstart.ubuntu.com/cookbook/#run-a-job-as-a-different-user
-
-exec su -s /bin/sh -c 'exec "$0" "$@"' <%= @user -%> -- /usr/bin/etcd -n <%= @node_name -%> -C <%= @cluster_list -%> -d <%= @storage_dir -%> 
+[peer]
+addr = "<%= @peer_addr -%>"
+bind_addr = "<%= @peer_bind_addr -%>"
+ca_file = "<%= @peer_ca_file -%>"
+cert_file = "<%= @peer_cert_File -%>"
+key_file = "<%= @peer_key_file -%>"

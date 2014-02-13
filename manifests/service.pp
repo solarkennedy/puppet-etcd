@@ -1,8 +1,8 @@
-class etcd::service {
+class etcd::service inherits etcd {
 
   service { 'etcd':
-    ensure => $::etcd::service_ensure,
-    enable => $::etcd::service_enable,
+    ensure   => $service_ensure,
+    enable   => $service_enable,
     provider => 'upstart',
   }
 
