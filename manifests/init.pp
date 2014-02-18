@@ -15,6 +15,7 @@
 class etcd (
   $service_ensure     = 'running',
   $service_enable     = true,
+  $use_upstart        = true,
   $package_ensure     = 'installed',
   $package_name       = 'etcd',
   $manage_user        = true,
@@ -46,6 +47,7 @@ class etcd (
 
   validate_array($cors)
   validate_array($peers)
+  validate_bool($use_upstart)
   validate_bool($manage_user)
   validate_bool($snapshot)
   validate_bool($verbose)
