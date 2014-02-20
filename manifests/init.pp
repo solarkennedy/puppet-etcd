@@ -29,6 +29,7 @@ class etcd (
   $cpu_profile_file   = '',
   $data_dir           = '/var/lib/etcd',
   $key_file           = '',
+  $discovery          = false,
   $peers              = false,
   $peers_file         = false,
   $max_cluster_size   = '9',
