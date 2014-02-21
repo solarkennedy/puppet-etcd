@@ -7,10 +7,11 @@ class etcd::install inherits etcd {
   
   if $manage_data_dir {
     file { $data_dir:
-      ensure => 'directory',
-      owner  => $user,
-      group  => 'root',
-      mode   => '0750',
+      ensure  => 'directory',
+      owner   => $user,
+      group   => 'root',
+      mode    => '0750',
+      recurse => true
     }
   }
 
