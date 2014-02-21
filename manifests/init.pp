@@ -47,7 +47,9 @@ class etcd (
 ) inherits etcd::params {
 
   validate_array($cors)
-  validate_array($peers)
+  if (!$discovery) {
+    validate_array($peers)
+  }
   validate_bool($use_upstart)
   validate_bool($manage_user)
   validate_bool($snapshot)
