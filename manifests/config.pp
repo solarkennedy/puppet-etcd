@@ -9,7 +9,7 @@ class etcd::config inherits etcd {
   }
 
   file { '/etc/init/etcd.conf':
-    ensure  => file,
+    ensure  => $upstart,
     owner   => 'root',
     group   => 'root',
     mode    => '0444',
