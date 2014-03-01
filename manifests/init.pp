@@ -35,6 +35,8 @@ class etcd (
   $max_cluster_size   = '9',
   $max_result_buffer  = '1024',
   $max_retry_attempts = '3',
+  $election_timeout   = '200',
+  $heartbeat_interval = '50',
   $node_name          = $::fqdn,
   $snapshot           = false,
   $verbose            = false,

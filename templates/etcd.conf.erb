@@ -15,6 +15,8 @@ peers_file         = "<%= @peers_file -%>"
 <% if @discovery -%>
 discovery          = "<%= @discovery -%>"
 <% end -%>
+election_timeout   = <%= @election_timeout %>
+heartbeat_interval = <%= @heartbeat_interval %>
 max_cluster_size   = <%= @max_cluster_size %>
 max_result_buffer  = <%= @max_result_buffer %>
 max_retry_attempts = <%= @max_retry_attempts %>
