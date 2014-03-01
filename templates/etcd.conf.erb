@@ -15,8 +15,6 @@ peers_file         = "<%= @peers_file -%>"
 <% if @discovery -%>
 discovery          = "<%= @discovery -%>"
 <% end -%>
-election_timeout   = <%= @election_timeout %>
-heartbeat_interval = <%= @heartbeat_interval %>
 max_cluster_size   = <%= @max_cluster_size %>
 max_result_buffer  = <%= @max_result_buffer %>
 max_retry_attempts = <%= @max_retry_attempts %>
@@ -31,3 +29,5 @@ bind_addr          = "<%= @peer_bind_addr -%>"
 ca_file            = "<%= @peer_ca_file -%>"
 cert_file          = "<%= @peer_cert_File -%>"
 key_file           = "<%= @peer_key_file -%>"
+election_timeout   = <%=  @peer_election_timeout %>
+heartbeat_interval = <%=  @peer_heartbeat_interval %>
