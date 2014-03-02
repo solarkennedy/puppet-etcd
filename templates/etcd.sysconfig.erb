@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Daemon User
+ETCD_USER="<%= @user -%>"
+
+# Cluster Seeds
+#  You can specify a list here sepearated by commas, or leave it blank if
+#  you're playing with a single node.
+ETCD_SEEDS=""
+
+# Discovery Endpoint
+#  Leave it as the public URL unless you are running your own.
+ETCD_DISCOVER_ENDPOINT="https://discovery.etcd.io/"
+
+# Discovery Token
+#  If you are using the discovery protocol you can grab your cluster token
+#  from https://discovery.etcd.io/new if you are not hosting it yourself.
+ETCD_DISCOVERY_TOKEN=""
+
+# This node's name as it represents itself on the cluster.
+ETCD_NODE_NAME="<%= @node_name -%>"
+
+# Hostname and port for the etcd server to work on.
+ETCD_LISTEN="<%= @addr -%>"
+
+# Directory to store log and snapshot.
+ETCD_DATA_DIR="<%= @datadir -%>"
+
+# File to log stdout/stderr to.
+ETCD_OUT_FILE="/var/log/etcd/etcd.out"
+
+# Set logging vebosity for the file above.
+#   Valid options are "", "v" or "vv"
+ETCD_LOGGING="<% if @verbose == "true" -%>v<% end -%><% if @very_verbose == "true" -%>vv<% end -%>"
+
+# Max size of the cluster.
+ETCD_MAXSIZE=<%= @max_cluster_size -%>
+
+# Max size of result buffer.
+ETCD_MAXRESULT=<%= @max_result_buffer -%>
+
+# Number of retries to attempt while joining a cluster
+ETCD_RETRIES=<%= @max_retry_attempts -%>
+
+# Set security settings for the etcd server.
+#  Leave blank if you do not plan to use this feature, otherwise add appropriate
+#  paths.
+ETCD_CAFILE="<%= @ca_file -%>"
+ETCD_CERT="<%= @cert_file -%>"
+ETCD_KEY="<%= @key_file -%>"
+
+# Toggles snapshotting.
+#  Keep blank or set to true.
+ETCD_SNAPSHOT="<%= @snapshot -%>"
+
+# Hostname and port for the RAFT server to work on.
+RAFT_LISTEN="<%= @peer_addr -%>"
+
+# Set security settings for the RAFT server.
+#  Leave blank if you do not plan to use this feature, otherwise add appropriate
+#  paths.
+RAFT_CAFILE="<%= @peer_ca_file -%>"
+RAFT_CERT="<%= @peer_cert_File -%>"
+RAFT_KEY="<%= @peer_key_file -%>"
+
+# Below we build the opts to pass to the init script.
+
+ETCD_OPTS="-name=${ETCD_NODE_NAME} \
+          -addr=${ETCD_LISTEN} \
+          -peer-addr=${RAFT_LISTEN} \
+          -data-dir=${ETCD_DATA_DIR} \
+          -max-result-buffer=${ETCD_MAXRESULT} \
+          -max-cluster-size=${ETCD_MAXSIZE} \
+          -max-retry-attempts=${ETCD_RETRIES}"
+
+if [ x$ETCD_SEEDS != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -peers=${ETCD_SEEDS}"
+fi
+
+if [ x$ETCD_DISCOVERY_TOKEN != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -discovery=${ETCD_DISCOVER_ENDPOINT}${ETCD_DISCOVERY_TOKEN}"
+fi
+
+if [ "$ETCD_LOGGING" == "v" ]; then
+  ETCD_OPTS="$ETCD_OPTS -v"
+elif [ "$ETCD_LOGGING" == "vv" ]; then
+  ETCD_OPTS="$ETCD_OPTS -vv"
+fi
+
+if [ x$ETCD_SNAPSHOT != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -snapshot"
+fi
+
+if [ x$ETCD_CAFILE != "x" ] && [ x$ETCD_CERT != "x" ] && [ x$ETCD_KEY != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -ca-file=${ETCD_CAFILE} -cert-file=${ETCD_CERT} -key-file=${ETCD_KEY}"
+fi
+
+if [ x$RAFT_CAFILE != "x" ] && [ x$RAFT_CERT != "x" ] && [ x$RAFT_KEY != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -peer-ca-file=${RAFT_CAFILE} -peer-cert-file=${RAFT_CERT} -peer-key-file=${RAFT_KEY}"
+fi
+
+# TODO
+# Add support for:
+#  -peers-file
+#  -config
+#  -cors 
+#  -cpuprofile

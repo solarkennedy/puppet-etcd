@@ -11,6 +11,7 @@
 # === Authors
 #
 # Kyle Anderson <kyle@xkyle.com>
+# Mathew Finch <finchster@gmail.com>
 #
 class etcd (
   $service_ensure     = 'running',
