@@ -4,8 +4,8 @@ About
 
 This puppet module installs and configures etcd.
 
-WARNING: This module is totally untested. (except for unit tests) It probably 
-doesn't work! PR me!
+WARNING: This module probably has some rough edges. PR me with your 
+modifications! (And tests!)
 
 It is designed around the current version of etcd (at time of this writing), 
 0.3.0. 
