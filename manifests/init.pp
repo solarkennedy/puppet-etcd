@@ -17,6 +17,7 @@ class etcd (
   $service_enable     = true,
   $package_ensure     = 'installed',
   $package_name       = 'etcd',
+  $binary_location    = '/usr/bin/etcd',
   $manage_user        = true,
   $manage_data_dir    = true,
   $user               = 'etcd',
