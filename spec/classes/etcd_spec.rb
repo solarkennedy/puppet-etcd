@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe 'etcd', :type => :class do
   context 'On an unknown OS' do
-    it { expect { subject }.to raise_error() }
+    let(:facts) { {:osfamily => 'Unknown'} }
+    it { should raise_error() }
   end
 
   context 'On a debian class OS with defaults' do
