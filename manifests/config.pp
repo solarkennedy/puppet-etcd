@@ -1,3 +1,5 @@
+# == Class etcd::config
+#
 class etcd::config inherits etcd {
 
   file { '/etc/etcd':

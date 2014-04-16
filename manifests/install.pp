@@ -1,21 +1,23 @@
-class etcd::install inherits etcd {
+# == Class etcd::install
+#
+class etcd::install {
 
   package { 'etcd':
-    name   => $package_name,
-    ensure => $package_ensure,
+    ensure => $etcd::package_ensure,
+    name   => $etcd::package_name,
   }
-  
-  if $manage_data_dir {
-    file { $data_dir:
+
+  if $etcd::manage_data_dir {
+    file { $etcd::data_dir:
       ensure => 'directory',
-      owner  => $user,
+      owner  => $etcd::user,
       group  => 'root',
       mode   => '0750',
     }
   }
 
-  if $manage_user {
-    user { $user:
+  if $etcd::manage_user {
+    user { $etcd::user:
       ensure => 'present',
     }
   }

@@ -1,3 +1,5 @@
+# == Class etcd::params
+#
 class etcd::params {
 
   case $::osfamily {
