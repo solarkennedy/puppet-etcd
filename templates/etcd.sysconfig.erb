@@ -15,11 +15,6 @@
 # Daemon User
 ETCD_USER="<%= @user -%>"
 
-# Cluster Seeds
-#  You can specify a list here sepearated by commas, or leave it blank if
-#  you're playing with a single node.
-ETCD_SEEDS=""
-
 # Discovery Endpoint
 #  Leave it as the public URL unless you are running your own.
 ETCD_DISCOVER_ENDPOINT="<%= @discovery_endpoint -%>"
@@ -28,6 +23,11 @@ ETCD_DISCOVER_ENDPOINT="<%= @discovery_endpoint -%>"
 #  If you are using the discovery protocol you can grab your cluster token
 #  from https://discovery.etcd.io/new if you are not hosting it yourself.
 ETCD_DISCOVERY_TOKEN="<%= @discovery_token -%>"
+
+# Peer list
+#  You can specify a list here sepearated by commas, or leave it blank if
+#  you're playing with a single node.
+ETCD_PEERS="<%= @peers.join('","') -%>"
 
 # This node's name as it represents itself on the cluster.
 ETCD_NODE_NAME="<%= @node_name -%>"
@@ -82,12 +82,12 @@ ETCD_OPTS="-name=${ETCD_NODE_NAME} \
           -max-result-buffer=${ETCD_MAXRESULT} \
           -max-retry-attempts=${ETCD_RETRIES}"
 
-if [ x$ETCD_SEEDS != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -peers=${ETCD_SEEDS}"
-fi
-
 if [ x$ETCD_DISCOVERY_TOKEN != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -discovery=${ETCD_DISCOVER_ENDPOINT}${ETCD_DISCOVERY_TOKEN}"
+fi
+
+if [ x$ETCD_PEERS != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -peers ${ETCD_PEERS}"
 fi
 
 if [ "$ETCD_LOGGING" == "v" ]; then
