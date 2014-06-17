@@ -34,6 +34,7 @@ class etcd (
   $data_dir                = $etcd::params::etcd_data_dir,
   $discovery               = $etcd::params::etcd_discovery,
   $discovery_endpoint      = $etcd::params::etcd_discovery_endpoint,
+  $discovery_token         = $etcd::params::etcd_discovery_token,
   $peers                   = $etcd::params::etcd_peers,
   $peers_file              = $etcd::params::etcd_peers_file,
   $max_result_buffer       = $etcd::params::etcd_max_result_buffer,
@@ -49,9 +50,9 @@ class etcd (
   $peer_bind_addr          = $etcd::params::etcd_peer_bind_addr,
   $peer_ca_file            = $etcd::params::etcd_peer_ca_file,
   $peer_cert_File          = $etcd::params::etcd_peer_cert_File,
-  $peer_key_file           = $etcd::params::etcd_peer_key_file
-  ) inherits etcd::params {
+  $peer_key_file           = $etcd::params::etcd_peer_key_file) inherits etcd::params {
   validate_array($cors)
+
   if (!$discovery) {
     validate_array($peers)
   }

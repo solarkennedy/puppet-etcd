@@ -38,6 +38,7 @@ class etcd::params {
   # Discovery support
   $etcd_discovery               = false
   $etcd_discovery_endpoint      = 'https://discovery.etcd.io/'
+  $etcd_discovery_token         = ''
 
   # Peer settings
   $etcd_peer_addr               = "${::fqdn}:7001"

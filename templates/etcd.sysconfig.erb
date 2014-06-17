@@ -27,7 +27,7 @@ ETCD_DISCOVER_ENDPOINT="<%= @discovery_endpoint -%>"
 # Discovery Token
 #  If you are using the discovery protocol you can grab your cluster token
 #  from https://discovery.etcd.io/new if you are not hosting it yourself.
-ETCD_DISCOVERY_TOKEN=""
+ETCD_DISCOVERY_TOKEN="<%= @discovery_token -%>"
 
 # This node's name as it represents itself on the cluster.
 ETCD_NODE_NAME="<%= @node_name -%>"
