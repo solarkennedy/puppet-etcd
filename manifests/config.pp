@@ -7,7 +7,7 @@ class etcd::config {
         ensure  => present,
         owner   => $etcd::user,
         group   => $etcd::group,
-        mode    => '0444',
+        mode    => '0644',
         content => template('etcd/etcd.sysconfig.erb'),
       }
     }
@@ -23,7 +23,7 @@ class etcd::config {
         ensure  => file,
         owner   => 'root',
         group   => 'root',
-        mode    => '0444',
+        mode    => '0644',
         content => template('etcd/etcd.conf.erb'),
         require => File['/etc/etcd']
       }

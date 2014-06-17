@@ -1,11 +1,6 @@
 # == Class etcd::install
 #
 class etcd::install {
-  package { 'etcd':
-    ensure => $etcd::package_ensure,
-    name   => $etcd::package_name,
-  }
-
   # Create group and user if required
   if $etcd::manage_user {
     group { $etcd::group: ensure => 'present' }
@@ -13,7 +8,8 @@ class etcd::install {
     user { $etcd::user:
       ensure  => 'present',
       gid     => $etcd::group,
-      require => Group[$etcd::group]
+      require => Group[$etcd::group],
+      before  => Package['etcd']
     }
   }
 
@@ -24,6 +20,7 @@ class etcd::install {
       owner  => $etcd::user,
       group  => $etcd::group,
       mode   => '0750',
+      before => Package['etcd']
     }
   }
 
@@ -32,4 +29,9 @@ class etcd::install {
     User[$etcd::user] -> File[$etcd::data_dir]
   }
 
+  # Install the required package
+  package { 'etcd':
+    ensure => $etcd::package_ensure,
+    name   => $etcd::package_name,
+  }
 }

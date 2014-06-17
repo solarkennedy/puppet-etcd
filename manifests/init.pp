@@ -12,6 +12,7 @@
 #
 # Kyle Anderson <kyle@xkyle.com>
 # Mathew Finch <finchster@gmail.com>
+# Gavin Williams <fatmcgav@gmail.com>
 #
 class etcd (
   $service_ensure     = 'running',
@@ -30,6 +31,7 @@ class etcd (
   $cpu_profile_file   = '',
   $data_dir           = '/var/lib/etcd',
   $key_file           = '',
+  $discovery          = false,
   $peers              = [],
   $peers_file         = '',
   $max_cluster_size   = '9',
@@ -43,11 +45,12 @@ class etcd (
   $peer_bind_addr     = '127.0.0.1:7001',
   $peer_ca_file       = '',
   $peer_cert_File     = '',
-  $peer_key_file      = '',
-) inherits etcd::params {
-
+  $peer_key_file      = '',) inherits etcd::params {
   validate_array($cors)
-  validate_array($peers)
+
+  if (!$discovery) {
+    validate_array($peers)
+  }
   validate_bool($manage_user)
   validate_bool($snapshot)
   validate_bool($verbose)
@@ -55,9 +58,9 @@ class etcd (
   validate_bool($manage_data_dir)
 
   anchor { 'etcd::begin': } ->
-  class  { '::etcd::install': } ->
-  class  { '::etcd::config': } ~>
-  class  { '::etcd::service': } ->
+  class { '::etcd::install': } ->
+  class { '::etcd::config': } ~>
+  class { '::etcd::service': } ->
   anchor { 'etcd::end': }
 
 }
