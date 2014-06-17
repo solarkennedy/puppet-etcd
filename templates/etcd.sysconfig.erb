@@ -22,7 +22,7 @@ ETCD_SEEDS=""
 
 # Discovery Endpoint
 #  Leave it as the public URL unless you are running your own.
-ETCD_DISCOVER_ENDPOINT="https://discovery.etcd.io/"
+ETCD_DISCOVER_ENDPOINT="<%= @discovery_endpoint -%>"
 
 # Discovery Token
 #  If you are using the discovery protocol you can grab your cluster token
@@ -45,9 +45,6 @@ ETCD_OUT_FILE="/var/log/etcd/etcd.out"
 #   Valid options are "", "v" or "vv"
 ETCD_LOGGING="<% if @verbose == "true" -%>v<% end -%><% if @very_verbose == "true" -%>vv<% end -%>"
 
-# Max size of the cluster.
-ETCD_MAXSIZE=<%= @max_cluster_size -%>
-
 # Max size of result buffer.
 ETCD_MAXRESULT=<%= @max_result_buffer -%>
 
@@ -64,6 +61,7 @@ ETCD_KEY="<%= @key_file -%>"
 # Toggles snapshotting.
 #  Keep blank or set to true.
 ETCD_SNAPSHOT="<%= @snapshot -%>"
+ETCD_SNAPSHOT_COUNT="<%= @snapshot_count %>"
 
 # Hostname and port for the RAFT server to work on.
 RAFT_LISTEN="<%= @peer_addr -%>"
@@ -82,7 +80,6 @@ ETCD_OPTS="-name=${ETCD_NODE_NAME} \
           -peer-addr=${RAFT_LISTEN} \
           -data-dir=${ETCD_DATA_DIR} \
           -max-result-buffer=${ETCD_MAXRESULT} \
-          -max-cluster-size=${ETCD_MAXSIZE} \
           -max-retry-attempts=${ETCD_RETRIES}"
 
 if [ x$ETCD_SEEDS != "x" ]; then
@@ -100,7 +97,7 @@ elif [ "$ETCD_LOGGING" == "vv" ]; then
 fi
 
 if [ x$ETCD_SNAPSHOT != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -snapshot"
+  ETCD_OPTS="$ETCD_OPTS -snapshot --snapshot-count=${ETCD_SNAPSHOT_COUNT}"
 fi
 
 if [ x$ETCD_CAFILE != "x" ] && [ x$ETCD_CERT != "x" ] && [ x$ETCD_KEY != "x" ]; then
