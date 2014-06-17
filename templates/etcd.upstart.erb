@@ -12,4 +12,5 @@ respawn
 # Official way to run as a different user:
 # http://upstart.ubuntu.com/cookbook/#run-a-job-as-a-different-user
 
-exec su -s /bin/sh -c 'exec "$0" "$@"' <%= @user -%> -- /usr/bin/etcd  
+exec su -s /bin/sh -c 'exec "$0" "$@"' <%= @user -%> -- <%= @binary_location %>
+
