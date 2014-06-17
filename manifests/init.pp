@@ -11,6 +11,7 @@
 # === Authors
 #
 # Kyle Anderson <kyle@xkyle.com>
+# Mathew Finch <finchster@gmail.com>
 #
 class etcd (
   $service_ensure     = 'running',
@@ -20,6 +21,7 @@ class etcd (
   $manage_user        = true,
   $manage_data_dir    = true,
   $user               = 'etcd',
+  $group              = 'etcd',
   $addr               = '127.0.0.1:4001',
   $bind_addr          = '127.0.0.1:4001',
   $ca_file            = '',
