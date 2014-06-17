@@ -4,16 +4,16 @@ class etcd::service {
   # Switch service details based on osfamily
   case $::osfamily {
     'RedHat' : {
-      $service_location  = '/etc/init.d/etcd'
-      $service_file      = template('etcd/etcd.initd.erb')
-      $service_file_mode = '0755'
-      $service_provider  = undef
+      $service_file_location = '/etc/init.d/etcd'
+      $service_file_contents = template('etcd/etcd.initd.erb')
+      $service_file_mode     = '0755'
+      $service_provider      = undef
     }
     'Debian' : {
-      $service_location  = '/etc/init/etcd.conf'
-      $service_file      = template('etcd/etcd.upstart.erb')
-      $service_file_mode = '0444'
-      $service_provider  = 'upstart'
+      $service_file_location = '/etc/init/etcd.conf'
+      $service_file_contents = template('etcd/etcd.upstart.erb')
+      $service_file_mode     = '0444'
+      $service_provider      = 'upstart'
     }
     default  : {
       fail("OSFamily ${::osfamily} not supported.")
@@ -24,11 +24,11 @@ class etcd::service {
   # Create the appropriate service file
   file { 'etcd-servicefile':
     ensure  => file,
-    path    => $service_file,
+    path    => $service_file_location,
     owner   => $etcd::user,
     group   => $etcd::group,
     mode    => $service_file_mode,
-    content => $service_file,
+    content => $service_file_contents,
     notify  => Service['etcd']
   }
 
@@ -39,4 +39,3 @@ class etcd::service {
     provider => $service_provider,
   }
 }
-

@@ -43,7 +43,7 @@ class etcd::params {
   # Peer settings
   $etcd_peer_addr               = "${::fqdn}:7001"
   $etcd_peer_bind_addr          = $etcd_peer_addr
-  $etcd_peers                   = undef
+  $etcd_peers                   = []
   $etcd_peers_file              = undef
   $etcd_peer_ca_file            = ''
   $etcd_peer_cert_File          = ''
