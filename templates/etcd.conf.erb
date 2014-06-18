@@ -13,7 +13,7 @@ peers              = ["<%= @peers.join('", "') -%>"]
 peers_file         = "<%= @peers_file -%>"
 <% end -%>
 <% if @discovery -%>
-discovery          = "<%= @{discovery_endpoint}@{discovery_token} -%>"
+discovery          = "<%= @discovery_endpoint -%><%= @discovery_token -%>"
 <% end -%>
 max_result_buffer  = <%= @max_result_buffer %>
 max_retry_attempts = <%= @max_retry_attempts %>
