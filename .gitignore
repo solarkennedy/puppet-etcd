@@ -3,7 +3,8 @@ metadata.json
 Gemfile.lock
 .rspec_system/
 .*.sw*
-spec/fixtures/
+spec/fixtures/modules/
+spec/fixtures/manifests/
 .project
 .bundle/
 .librarian/

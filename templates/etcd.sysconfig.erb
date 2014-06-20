@@ -46,10 +46,10 @@ ETCD_OUT_FILE="/var/log/etcd/etcd.out"
 ETCD_LOGGING="<% if @very_verbose -%>vv<% elsif @verbose -%>v<% end -%>"
 
 # Max size of result buffer.
-ETCD_MAXRESULT=<%= @max_result_buffer -%>
+ETCD_MAXRESULT=<%= @max_result_buffer %>
 
 # Number of retries to attempt while joining a cluster
-ETCD_RETRIES=<%= @max_retry_attempts -%>
+ETCD_RETRIES=<%= @max_retry_attempts %>
 
 # Set security settings for the etcd server.
 #  Leave blank if you do not plan to use this feature, otherwise add appropriate

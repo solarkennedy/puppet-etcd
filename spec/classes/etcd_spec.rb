@@ -7,9 +7,17 @@ describe 'etcd', :type => :class do
   end
 
   describe 'On a Debian OS' do
-    let(:facts) { {:osfamily => 'Debian'} }
+    let(:facts) { {
+        :osfamily => 'Debian',
+        :fqdn     => 'etcd.test.local'
+      } }
 
     context 'With defaults' do
+      # Default etcd conf file
+      let(:etcd_default_config) {
+        File.read(my_fixture("etcd.conf"))
+      }
+
       # etcd::init resources
       it { should create_class('etcd') }
       it { should contain_class('etcd::params') }
@@ -40,7 +48,7 @@ describe 'etcd', :type => :class do
           'owner'  => 'etcd',
           'group'  => 'etcd',
           'mode'   => '0644'
-        }).that_requires('File[/etc/etcd]') }
+        }).with_content(etcd_default_config).that_requires('File[/etc/etcd]') }
       # etcd::service resources
       it { should contain_file('etcd-servicefile').with({
           'ensure' => 'file',
@@ -108,7 +116,7 @@ describe 'etcd', :type => :class do
         should contain_file('/etc/etcd/etcd.conf').with_content(/discovery\s*= "http:\/\/local-discovery:4001\/v2\/keys\/123456"/)
       }
     end
-    
+
     context 'When enabling cluster discovery without a token' do
       let(:params) { { :discovery => true } }
       it {
@@ -181,9 +189,17 @@ describe 'etcd', :type => :class do
   end
 
   describe 'On a Redhat OS' do
-    let(:facts) { {:osfamily => 'Redhat'} }
+    let(:facts) { {
+        :osfamily => 'Redhat',
+        :fqdn     => 'etcd.test.local'
+      } }
 
     context 'With defaults' do
+      # Default etcd sysconfig file
+      let(:etcd_default_sysconfig) {
+        File.read(my_fixture("etcd.sysconfig"))
+      }
+      
       # etcd::init resources
       it { should create_class('etcd') }
       it { should contain_class('etcd::params') }
@@ -208,7 +224,7 @@ describe 'etcd', :type => :class do
           'owner'  => 'etcd',
           'group'  => 'etcd',
           'mode'   => '0644'
-        }) }
+        }).with_content(etcd_default_sysconfig) }
       # etcd::service resources
       it { should contain_file('etcd-servicefile').with({
           'ensure' => 'file',
@@ -271,19 +287,19 @@ describe 'etcd', :type => :class do
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_DISCOVERY_TOKEN="123456"/)
       }
     end
-    
+
     context 'When enabling cluster discovery without a token' do
       let(:params) { { :discovery => true } }
       it {
         should raise_error()
       }
     end
-    
+
     context 'When enabling verbose logging' do
       let(:params) { { :verbose => true } }
       it { should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_LOGGING="v"/) }
     end
-    
+
     context 'When enabling very verbose logging' do
       let(:params) { { :very_verbose => true } }
       it { should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_LOGGING="vv"/) }
