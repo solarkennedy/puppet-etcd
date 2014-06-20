@@ -2,12 +2,14 @@ addr               = "<%= @addr -%>"
 bind_addr          = "<%= @bind_addr -%>"
 ca_file            = "<%= @ca_file -%>"
 cert_file          = "<%= @cert_file -%>"
-cors               = ["<%= @cors.join('", "') -%>"]
+<% if @cors and !@cors.empty? -%>
+cors               = ["<%=  @cors.join('", "') -%>"]
+<% end -%>
 cpu_profile_file   = "<%= @cpu_profile_file -%>"
 data_dir           = "<%= @data_dir -%>"
 key_file           = "<%= @key_file -%>"
-<% if @peers -%>
-peers              = ["<%= @peers.join('", "') -%>"]
+<% if @peers and !@peers.empty? -%>
+peers              = ["<%=  @peers.join('", "') -%>"]
 <% end -%>
 <% if @peers_file -%>
 peers_file         = "<%= @peers_file -%>"
