@@ -6,3 +6,6 @@ Gemfile.lock
 spec/fixtures/
 .project
 .bundle/
+.librarian/
+.tmp/
+Puppetfile.lock
