@@ -17,6 +17,11 @@ describe 'etcd', :type => :class do
       let(:etcd_default_config) {
         File.read(my_fixture("etcd.conf"))
       }
+      
+      # Default upstart file
+      let(:etcd_default_upstart) {
+        File.read(my_fixture("etcd.upstart"))
+      }
 
       # etcd::init resources
       it { should create_class('etcd') }
@@ -56,7 +61,7 @@ describe 'etcd', :type => :class do
           'owner'  => 'etcd',
           'group'  => 'etcd',
           'mode'   => '0444'
-        }).that_notifies('Service[etcd]') }
+        }).with_content(etcd_default_upstart).that_notifies('Service[etcd]') }
       it { should contain_service('etcd').with_ensure('running').with_enable('true').with_provider('upstart') }
     end
 
