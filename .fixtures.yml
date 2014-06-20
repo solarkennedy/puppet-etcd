@@ -1,6 +1,4 @@
+---
 fixtures:
-  repositories:
-    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
   symlinks:
-    "etcd": "#{source_dir}"
-
+    etcd: "#{source_dir}"

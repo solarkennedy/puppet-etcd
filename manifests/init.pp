@@ -51,11 +51,20 @@ class etcd (
   $peer_ca_file            = $etcd::params::etcd_peer_ca_file,
   $peer_cert_File          = $etcd::params::etcd_peer_cert_File,
   $peer_key_file           = $etcd::params::etcd_peer_key_file) inherits etcd::params {
-  validate_array($cors)
 
+  # Discovery settings
+  validate_bool($discovery)
+  # If not using discovery, should have a valid list of peers
   if (!$discovery) {
     validate_array($peers)
   }
+  # If using discovery, should have a valid discovery token
+  if ($discovery and $discovery_token == '') {
+    fail('Invalid discovery token specified')
+  }
+
+  # Validate other params
+  validate_array($cors)
   validate_bool($manage_user)
   validate_bool($snapshot)
   validate_bool($verbose)
