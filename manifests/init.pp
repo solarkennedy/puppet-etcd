@@ -60,9 +60,9 @@ class etcd (
   }
   # If using discovery, should have a valid discovery token
   if ($discovery and $discovery_token == '') {
-    fail('Invalid discovery token specified') 
+    fail('Invalid discovery token specified')
   }
-  
+
   # Validate other params
   validate_array($cors)
   validate_bool($manage_user)
