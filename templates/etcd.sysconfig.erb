@@ -43,7 +43,7 @@ ETCD_OUT_FILE="/var/log/etcd/etcd.out"
 
 # Set logging vebosity for the file above.
 #   Valid options are "", "v" or "vv"
-ETCD_LOGGING="<% if @verbose == "true" -%>v<% end -%><% if @very_verbose == "true" -%>vv<% end -%>"
+ETCD_LOGGING="<% if @very_verbose -%>vv<% elsif @verbose -%>v<% end -%>"
 
 # Max size of result buffer.
 ETCD_MAXRESULT=<%= @max_result_buffer -%>
