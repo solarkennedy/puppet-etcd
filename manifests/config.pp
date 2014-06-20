@@ -1,28 +1,35 @@
 # == Class etcd::config
 #
-class etcd::config inherits etcd {
+class etcd::config {
+  case $::osfamily {
+    'RedHat' : {
+      file { '/etc/sysconfig/etcd':
+        ensure  => present,
+        owner   => $etcd::user,
+        group   => $etcd::group,
+        mode    => '0644',
+        content => template('etcd/etcd.sysconfig.erb'),
+      }
+    }
+    'Debian' : {
+      file { '/etc/etcd':
+        ensure => directory,
+        owner  => $etcd::user,
+        group  => $etcd::group,
+        mode   => '0555'
+      }
 
-  file { '/etc/etcd':
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0550',
+      file { '/etc/etcd/etcd.conf':
+        ensure  => file,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => template('etcd/etcd.conf.erb'),
+        require => File['/etc/etcd']
+      }
+    }
+    default  : {
+      fail("OSFamily ${::osfamily} not supported.")
+    }
   }
-
-  file { '/etc/etcd/etcd.conf':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0444',
-    content => template('etcd/etcd.conf.erb'),
-  }
-
-  file { '/etc/init/etcd.conf':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0444',
-    content => template('etcd/etcd.upstart.erb'),
-  }
-
 }
