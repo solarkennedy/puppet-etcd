@@ -1,5 +1,5 @@
 name    'KyleAnderson-etcd'
-version '0.4.0'
+version '0.4.1'
 source 'https://github.com/solarkennedy/puppet-etcd'
 author 'KyleAnderson'
 license 'Apache License, Version 2.0'
