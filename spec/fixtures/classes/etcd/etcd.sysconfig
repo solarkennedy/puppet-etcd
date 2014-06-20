@@ -13,65 +13,65 @@
 # limitations under the License.
 
 # Daemon User
-ETCD_USER="<%= @user -%>"
+ETCD_USER="etcd"
 
 # Discovery Endpoint
 #  Leave it as the public URL unless you are running your own.
-ETCD_DISCOVER_ENDPOINT="<%= @discovery_endpoint -%>"
+ETCD_DISCOVER_ENDPOINT="https://discovery.etcd.io/"
 
 # Discovery Token
 #  If you are using the discovery protocol you can grab your cluster token
 #  from https://discovery.etcd.io/new if you are not hosting it yourself.
-ETCD_DISCOVERY_TOKEN="<%= @discovery_token -%>"
+ETCD_DISCOVERY_TOKEN=""
 
 # Peer list
 #  You can specify a list here sepearated by commas, or leave it blank if
 #  you're playing with a single node.
-ETCD_PEERS="<%= @peers.join('","') -%>"
+ETCD_PEERS=""
 
 # This node's name as it represents itself on the cluster.
-ETCD_NODE_NAME="<%= @node_name -%>"
+ETCD_NODE_NAME="etcd.test.local"
 
 # Hostname and port for the etcd server to work on.
-ETCD_LISTEN="<%= @addr -%>"
+ETCD_LISTEN="etcd.test.local:4001"
 
 # Directory to store log and snapshot.
-ETCD_DATA_DIR="<%= @data_dir -%>"
+ETCD_DATA_DIR="/var/lib/etcd"
 
 # File to log stdout/stderr to.
 ETCD_OUT_FILE="/var/log/etcd/etcd.out"
 
 # Set logging vebosity for the file above.
 #   Valid options are "", "v" or "vv"
-ETCD_LOGGING="<% if @very_verbose -%>vv<% elsif @verbose -%>v<% end -%>"
+ETCD_LOGGING=""
 
 # Max size of result buffer.
-ETCD_MAXRESULT=<%= @max_result_buffer %>
+ETCD_MAXRESULT=1024
 
 # Number of retries to attempt while joining a cluster
-ETCD_RETRIES=<%= @max_retry_attempts %>
+ETCD_RETRIES=3
 
 # Set security settings for the etcd server.
 #  Leave blank if you do not plan to use this feature, otherwise add appropriate
 #  paths.
-ETCD_CAFILE="<%= @ca_file -%>"
-ETCD_CERT="<%= @cert_file -%>"
-ETCD_KEY="<%= @key_file -%>"
+ETCD_CAFILE=""
+ETCD_CERT=""
+ETCD_KEY=""
 
 # Toggles snapshotting.
 #  Keep blank or set to true.
-ETCD_SNAPSHOT="<%= @snapshot -%>"
-ETCD_SNAPSHOT_COUNT="<%= @snapshot_count %>"
+ETCD_SNAPSHOT="true"
+ETCD_SNAPSHOT_COUNT="10000"
 
 # Hostname and port for the RAFT server to work on.
-RAFT_LISTEN="<%= @peer_addr -%>"
+RAFT_LISTEN="etcd.test.local:7001"
 
 # Set security settings for the RAFT server.
 #  Leave blank if you do not plan to use this feature, otherwise add appropriate
 #  paths.
-RAFT_CAFILE="<%= @peer_ca_file -%>"
-RAFT_CERT="<%= @peer_cert_File -%>"
-RAFT_KEY="<%= @peer_key_file -%>"
+RAFT_CAFILE=""
+RAFT_CERT=""
+RAFT_KEY=""
 
 # Below we build the opts to pass to the init script.
 

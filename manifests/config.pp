@@ -21,8 +21,8 @@ class etcd::config {
 
       file { '/etc/etcd/etcd.conf':
         ensure  => file,
-        owner   => 'root',
-        group   => 'root',
+        owner   => $etcd::user,
+        group   => $etcd::group,
         mode    => '0644',
         content => template('etcd/etcd.conf.erb'),
         require => File['/etc/etcd']
