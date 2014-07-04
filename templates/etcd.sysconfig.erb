@@ -39,7 +39,7 @@ ETCD_LISTEN="<%= @addr -%>"
 ETCD_DATA_DIR="<%= @data_dir -%>"
 
 # File to log stdout/stderr to.
-ETCD_OUT_FILE="/var/log/etcd/etcd.out"
+ETCD_OUT_FILE="<%= @log_dir -%>/etcd.out"
 
 # Set logging vebosity for the file above.
 #   Valid options are "", "v" or "vv"
