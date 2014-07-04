@@ -25,6 +25,10 @@ class etcd::params {
   $etcd_manage_data_dir         = true
   $etcd_data_dir                = '/var/lib/etcd'
 
+  # Manage Log Dir?
+  $etcd_manage_log_dir          = true
+  $etcd_log_dir                 = '/var/log/etcd'
+
   # Node settings
   $etcd_node_name               = $::fqdn
   $etcd_addr                    = "${::fqdn}:4001"

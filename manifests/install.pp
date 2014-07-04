@@ -23,10 +23,24 @@ class etcd::install {
       before => Package['etcd']
     }
   }
+  
+  # Create etcd log dir if required
+  if $etcd::manage_log_dir {
+    file { $etcd::log_dir:
+      ensure => 'directory',
+      owner  => $etcd::user,
+      group  => $etcd::group,
+      mode   => '0750',
+      before => Package['etcd']
+    }
+  }
 
   # Setup resource ordering if appropriate
   if ($etcd::manage_user and $etcd::manage_data_dir) {
     User[$etcd::user] -> File[$etcd::data_dir]
+  }
+  if ($etcd::manage_user and $etcd::manage_log_dir) {
+    User[$etcd::user] -> File[$etcd::log_dir]
   }
 
   # Install the required package
