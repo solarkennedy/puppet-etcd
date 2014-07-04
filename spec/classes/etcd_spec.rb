@@ -17,7 +17,7 @@ describe 'etcd', :type => :class do
       let(:etcd_default_config) {
         File.read(my_fixture("etcd.conf"))
       }
-      
+
       # Default upstart file
       let(:etcd_default_upstart) {
         File.read(my_fixture("etcd.upstart"))
@@ -35,6 +35,12 @@ describe 'etcd', :type => :class do
       it { should contain_group('etcd').with_ensure('present') }
       it { should contain_user('etcd').with_ensure('present').with_gid('etcd').that_requires('Group[etcd]') }
       it { should contain_file('/var/lib/etcd').with({
+          'ensure' =>'directory',
+          'owner'  => 'etcd',
+          'group'  => 'etcd',
+          'mode'   => '0750'
+        }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/var/log/etcd').with({
           'ensure' =>'directory',
           'owner'  => 'etcd',
           'group'  => 'etcd',
@@ -92,13 +98,25 @@ describe 'etcd', :type => :class do
     end
 
     context 'When using a custom data directory' do
-      let(:params) { { :data_dir => '/custom/dne/' } }
-      it { should contain_file('/custom/dne/').with({
-          'ensure' =>'directory',
+      let(:params) { { :data_dir => '/custom/dne' } }
+      it { should contain_file('/custom/dne').with({
+          'ensure' => 'directory',
           'owner'  => 'etcd',
           'group'  => 'etcd',
           'mode'   => '0750'
         }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/etc/etcd/etcd.conf').with_content(/data_dir\s*= "\/custom\/dne"/) }
+    end
+
+    context 'When using a custom log directory' do
+      let(:params) { { :log_dir => '/loghere/etcd' } }
+      it { should contain_file('/loghere/etcd').with({
+          'ensure' => 'directory',
+          'owner'  => 'etcd',
+          'group'  => 'etcd',
+          'mode'   => '0750'
+        }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+      it { should contain_file('etcd-servicefile').with_content(/\/loghere\/etcd\/etcd.out/) }
     end
 
     context 'When enabling cluster discovery' do
@@ -132,12 +150,15 @@ describe 'etcd', :type => :class do
     context 'When specifying all of the etcd config params' do
       let(:params) { {
           :addr                    => '1.2.3.4:5678',
+          :binary_location         => '/bin/etcd',
           :bind_addr               => '9.9.9.9:9999',
           :ca_file                 => '/test/ca_file',
           :cert_file               => '/test/cert_file',
           :cors                    => [ 'cors1', 'cors2' ],
           :cpu_profile_file        => '/test/cpu_profile_file',
           :data_dir                => '/test/data_dir',
+          :group                   => 'etcd_group',
+          :log_dir                 => '/test/log_dir',
           :key_file                => '/test/key_file',
           :peers                   => [ 'peer1', 'peer2' ],
           :peers_file              => '/test/peers_file',
@@ -146,6 +167,7 @@ describe 'etcd', :type => :class do
           :node_name               => 'test_node_name',
           :snapshot                => true,
           :snapshot_count          => '10000',
+          :user                    => 'etcd_user',
           :verbose                 => true,
           :very_verbose            => true,
           :peer_election_timeout   => '400',
@@ -156,12 +178,20 @@ describe 'etcd', :type => :class do
           :peer_cert_File          => '/test/peer_cert_file',
           :peer_key_file           => '/test/peer_key_file'
         } }
+      it { should contain_group('etcd_group').with_ensure('present') }
+      it { should contain_user('etcd_user').with_ensure('present').with_gid('etcd_group').that_requires('Group[etcd_group]') }
       it { should contain_file('/test/data_dir').with({
           'ensure' =>'directory',
-          'owner'  => 'etcd',
-          'group'  => 'etcd',
+          'owner'  => 'etcd_user',
+          'group'  => 'etcd_group',
           'mode'   => '0750'
-        }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+        }).that_requires('User[etcd_user]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/test/log_dir').with({
+          'ensure' =>'directory',
+          'owner'  => 'etcd_user',
+          'group'  => 'etcd_group',
+          'mode'   => '0750'
+        }).that_requires('User[etcd_user]').that_comes_before('Package[etcd]') }
       it {
         # Ensure that the config file is correctly populated
         should contain_file('/etc/etcd/etcd.conf').with_content(/addr\s*= "1\.2\.3\.4:5678"/)
@@ -190,6 +220,11 @@ describe 'etcd', :type => :class do
         should contain_file('/etc/etcd/etcd.conf').with_content(/election_timeout\s*= 400/)
         should contain_file('/etc/etcd/etcd.conf').with_content(/heartbeat_interval\s*= 60/)
       }
+      it { 
+        # Ensure that the upstart script is correctly populated
+        should contain_file('etcd-servicefile').with_content(/\/bin\/etcd/)
+        should contain_file('etcd-servicefile').with_content(/\/test\/log_dir\/etcd.out/) 
+      }
     end
   end
 
@@ -204,7 +239,7 @@ describe 'etcd', :type => :class do
       let(:etcd_default_sysconfig) {
         File.read(my_fixture("etcd.sysconfig"))
       }
-      
+
       # etcd::init resources
       it { should create_class('etcd') }
       it { should contain_class('etcd::params') }
@@ -217,6 +252,12 @@ describe 'etcd', :type => :class do
       it { should contain_group('etcd').with_ensure('present') }
       it { should contain_user('etcd').with_ensure('present').with_gid('etcd').that_requires('Group[etcd]') }
       it { should contain_file('/var/lib/etcd').with({
+          'ensure' =>'directory',
+          'owner'  => 'etcd',
+          'group'  => 'etcd',
+          'mode'   => '0750'
+        }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/var/log/etcd').with({
           'ensure' =>'directory',
           'owner'  => 'etcd',
           'group'  => 'etcd',
@@ -272,13 +313,25 @@ describe 'etcd', :type => :class do
     end
 
     context 'When using a custom data directory' do
-      let(:params) { { :data_dir => '/custom/dne/' } }
-      it { should contain_file('/custom/dne/').with({
+      let(:params) { { :data_dir => '/custom/dne' } }
+      it { should contain_file('/custom/dne').with({
           'ensure' => 'directory',
           'owner'  => 'etcd',
           'group'  => 'etcd',
           'mode'   => '0750'
         }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_DATA_DIR="\/custom\/dne"/) }
+    end
+
+    context 'When using a custom log directory' do
+      let(:params) { { :log_dir => '/loghere/etcd' } }
+      it { should contain_file('/loghere/etcd').with({
+          'ensure' => 'directory',
+          'owner'  => 'etcd',
+          'group'  => 'etcd',
+          'mode'   => '0750'
+        }).that_requires('User[etcd]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_OUT_FILE="\/loghere\/etcd\/etcd.out"/) }
     end
 
     context 'When specifying a custom discovery endpoint and token' do
@@ -319,6 +372,7 @@ describe 'etcd', :type => :class do
           :cors                    => [ 'cors1', 'cors2' ],
           :cpu_profile_file        => '/test/cpu_profile_file',
           :data_dir                => '/test/data_dir',
+          :log_dir                 => '/test/log_dir',
           :key_file                => '/test/key_file',
           :peers                   => [ 'peer1', 'peer2' ],
           :peers_file              => '/test/peers_file',
@@ -341,6 +395,18 @@ describe 'etcd', :type => :class do
         } }
       it { should contain_group('etcd_group').with_ensure('present') }
       it { should contain_user('etcd_user').with_ensure('present').with_gid('etcd_group').that_requires('Group[etcd_group]') }
+      it { should contain_file('/test/data_dir').with({
+          'ensure' =>'directory',
+          'owner'  => 'etcd_user',
+          'group'  => 'etcd_group',
+          'mode'   => '0750'
+        }).that_requires('User[etcd_user]').that_comes_before('Package[etcd]') }
+      it { should contain_file('/test/log_dir').with({
+          'ensure' =>'directory',
+          'owner'  => 'etcd_user',
+          'group'  => 'etcd_group',
+          'mode'   => '0750'
+        }).that_requires('User[etcd_user]').that_comes_before('Package[etcd]') }
       it {
         # Ensure that the config file is correctly populated
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_USER="etcd_user"/)
@@ -350,7 +416,7 @@ describe 'etcd', :type => :class do
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_NODE_NAME="test_node_name"/)
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_LISTEN="1.2.3.4:5678"/)
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_DATA_DIR="\/test\/data_dir"/)
-        should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_OUT_FILE="\/var\/log\/etcd\/etcd.out"/)
+        should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_OUT_FILE="\/test\/log_dir\/etcd.out"/)
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_LOGGING="vv"/)
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_MAXRESULT=222/)
         should contain_file('/etc/sysconfig/etcd').with_content(/ETCD_RETRIES=333/)
