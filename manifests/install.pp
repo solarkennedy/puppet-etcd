@@ -23,7 +23,7 @@ class etcd::install {
       before => Package['etcd']
     }
   }
-  
+
   # Create etcd log dir if required
   if $etcd::manage_log_dir {
     file { $etcd::log_dir:

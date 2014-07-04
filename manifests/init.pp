@@ -32,7 +32,7 @@ class etcd (
   $cpu_profile_file        = $etcd::params::etcd_cpu_profile_file,
   $manage_data_dir         = $etcd::params::etcd_manage_data_dir,
   $data_dir                = $etcd::params::etcd_data_dir,
-  $manage_log_dir          = $etcd::params::etcd_manage_log_dir, 
+  $manage_log_dir          = $etcd::params::etcd_manage_log_dir,
   $log_dir                 = $etcd::params::etcd_log_dir,
   $discovery               = $etcd::params::etcd_discovery,
   $discovery_endpoint      = $etcd::params::etcd_discovery_endpoint,
