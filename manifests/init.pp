@@ -17,6 +17,7 @@
 class etcd (
   $service_ensure          = $etcd::params::etcd_service_ensure,
   $service_enable          = $etcd::params::etcd_service_enable,
+  $manage_service_file     = $etcd::params::etcd_manage_service_file,
   $package_ensure          = $etcd::params::etcd_package_ensure,
   $package_name            = $etcd::params::etcd_package_name,
   $binary_location         = $etcd::params::etcd_binary_location,
@@ -72,6 +73,7 @@ class etcd (
   validate_bool($verbose)
   validate_bool($very_verbose)
   validate_bool($manage_data_dir)
+  validate_bool($manage_service_file)
 
   anchor { 'etcd::begin': } ->
   class { '::etcd::install': } ->

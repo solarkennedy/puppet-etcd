@@ -11,6 +11,7 @@ class etcd::params {
   # Service settings
   $etcd_service_ensure          = 'running'
   $etcd_service_enable          = true
+  $etcd_manage_service_file     = true
 
   # Package settings
   $etcd_package_ensure          = 'installed'

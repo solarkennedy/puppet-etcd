@@ -79,6 +79,13 @@ describe 'etcd', :type => :class do
       it { should contain_service('etcd').with_ensure('stopped').with_enable('false') }
     end
 
+    context 'When asked not to manage the service file' do
+      let(:params) { {
+          :manage_service_file => false
+        } }
+      it { should_not contain_file('etcd-servicefile') }
+    end
+
     context 'When overriding package parameters' do
       let(:params) { {
           :package_ensure => 'absent',
@@ -291,6 +298,13 @@ describe 'etcd', :type => :class do
           :service_ensure => 'stopped',
           :service_enable => false }}
       it { should contain_service('etcd').with_ensure('stopped').with_enable('false') }
+    end
+
+    context 'When asked not to manage the service file' do
+      let(:params) { {
+          :manage_service_file => false
+        } }
+      it { should_not contain_file('etcd-servicefile') }
     end
 
     context 'When overriding package parameters' do

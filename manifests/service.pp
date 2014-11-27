@@ -22,14 +22,16 @@ class etcd::service {
   }
 
   # Create the appropriate service file
-  file { 'etcd-servicefile':
-    ensure  => file,
-    path    => $service_file_location,
-    owner   => $etcd::user,
-    group   => $etcd::group,
-    mode    => $service_file_mode,
-    content => $service_file_contents,
-    notify  => Service['etcd']
+  if $etcd::manage_service_file {
+    file { 'etcd-servicefile':
+      ensure  => file,
+      path    => $service_file_location,
+      owner   => $etcd::user,
+      group   => $etcd::group,
+      mode    => $service_file_mode,
+      content => $service_file_contents,
+      notify  => Service['etcd']
+    }
   }
 
   # Set service status
