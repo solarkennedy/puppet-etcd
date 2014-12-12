@@ -73,6 +73,12 @@ RAFT_CAFILE="<%= @peer_ca_file -%>"
 RAFT_CERT="<%= @peer_cert_File -%>"
 RAFT_KEY="<%= @peer_key_file -%>"
 
+# Initial cluster settings
+# After the cluster is running, only the admin endpoint is used
+<% if @cluster_active_size -%>CLUSTER_ACTIVE_SIZE="<%= @cluster_active_size %>"<% end -%>
+CLUSTER_REMOVE_DELAY="<%= @cluster_remove_delay %>"
+CLUSTER_SYNC_INTERVAL="<%= @cluster_sync_interval %>"
+
 # Below we build the opts to pass to the init script.
 
 ETCD_OPTS="-name=${ETCD_NODE_NAME} \
@@ -80,7 +86,10 @@ ETCD_OPTS="-name=${ETCD_NODE_NAME} \
           -peer-addr=${RAFT_LISTEN} \
           -data-dir=${ETCD_DATA_DIR} \
           -max-result-buffer=${ETCD_MAXRESULT} \
-          -max-retry-attempts=${ETCD_RETRIES}"
+          -max-retry-attempts=${ETCD_RETRIES} \
+          <% if @cluster_active_size -%>-cluster-active-size=${CLUSTER_ACTIVE_SIZE} <% end -%> \
+          -cluster-sync-interval=${CLUSTER_SYNC_INTERVAL} \
+          -cluster-remove-delay=${CLUSTER_REMOVE_DELAY}"
 
 if [ x$ETCD_DISCOVERY_TOKEN != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -discovery=${ETCD_DISCOVER_ENDPOINT}${ETCD_DISCOVERY_TOKEN}"

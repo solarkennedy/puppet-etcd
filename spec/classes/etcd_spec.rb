@@ -405,7 +405,10 @@ describe 'etcd', :type => :class do
           :peer_bind_addr          => '2.2.2.2:2222',
           :peer_ca_file            => '/test/peer_ca_file',
           :peer_cert_File          => '/test/peer_cert_file',
-          :peer_key_file           => '/test/peer_key_file'
+          :peer_key_file           => '/test/peer_key_file',
+          :cluster_active_size     => '20',
+          :cluster_remove_delay    => '3600.0',
+          :cluster_sync_interval   => '10.0', 
         } }
       it { should contain_group('etcd_group').with_ensure('present') }
       it { should contain_user('etcd_user').with_ensure('present').with_gid('etcd_group').that_requires('Group[etcd_group]') }
@@ -443,6 +446,9 @@ describe 'etcd', :type => :class do
         should contain_file('/etc/sysconfig/etcd').with_content(/RAFT_CAFILE="\/test\/peer_ca_file"/)
         should contain_file('/etc/sysconfig/etcd').with_content(/RAFT_CERT="\/test\/peer_cert_file"/)
         should contain_file('/etc/sysconfig/etcd').with_content(/RAFT_KEY="\/test\/peer_key_file"/)
+        should contain_file('/etc/sysconfig/etcd').with_content(/CLUSTER_ACTIVE_SIZE="20"/)
+        should contain_file('/etc/sysconfig/etcd').with_content(/CLUSTER_REMOVE_DELAY="3600.0"/)
+        should contain_file('/etc/sysconfig/etcd').with_content(/CLUSTER_SYNC_INTERVAL="10.0"/)
       }
     end
   end
