@@ -72,13 +72,12 @@ RAFT_LISTEN="<%= @peer_addr -%>"
 RAFT_CAFILE="<%= @peer_ca_file -%>"
 RAFT_CERT="<%= @peer_cert_File -%>"
 RAFT_KEY="<%= @peer_key_file -%>"
-    
+
 # Initial cluster settings
 # After the cluster is running, only the admin endpoint is used
 <% if @cluster_active_size -%>CLUSTER_ACTIVE_SIZE="<%= @cluster_active_size %>"<% end -%>
 CLUSTER_REMOVE_DELAY="<%= @cluster_remove_delay %>"
 CLUSTER_SYNC_INTERVAL="<%= @cluster_sync_interval %>"
-
 
 # Below we build the opts to pass to the init script.
 
