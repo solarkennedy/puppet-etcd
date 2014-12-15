@@ -67,4 +67,9 @@ class etcd::params {
   # Tuning settings
   $etcd_max_result_buffer       = '1024'
   $etcd_max_retry_attempts      = '3'
+
+  # Cluster settings
+  $etcd_cluster_active_size     = false
+  $etcd_cluster_remove_delay    = '1800.0'
+  $etcd_cluster_sync_interval   = '5.0'
 }

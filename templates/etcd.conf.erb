@@ -33,3 +33,10 @@ cert_file          = "<%= @peer_cert_File -%>"
 key_file           = "<%= @peer_key_file -%>"
 election_timeout   = <%=  @peer_election_timeout %>
 heartbeat_interval = <%=  @peer_heartbeat_interval %>
+
+[cluster]
+<% if @cluster_active_size -%>
+active_size        = <%= @cluster_active_size %>
+<% end -%>
+remove_delay       = <%= @cluster_remove_delay %>
+sync_interval      = <%= @cluster_sync_interval %>
