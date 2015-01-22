@@ -1,6 +1,8 @@
 # == Class etcd::install
-#
-class etcd::install {
+class etcd::install (
+  $url     = $etcd::package_url,
+  $version = $etcd::package_version
+  ) {
   # Create group and user if required
   if $etcd::manage_user {
     group { $etcd::group: ensure => 'present' }
@@ -44,8 +46,28 @@ class etcd::install {
   }
 
   # Install the required package
-  package { 'etcd':
-    ensure => $etcd::package_ensure,
-    name   => $etcd::package_name,
+  if $url != undef {
+    exec {
+      'download-etcd':
+        command => "curl -O ${url}/etcd_${version}_${::architecture}.deb 2> /dev/null",
+        path    => ['/usr/bin', '/bin', '/usr/local/bin'],
+        cwd     => '/usr/src',
+        creates => "/usr/src/etcd_${version}_${::architecture}.deb",
+        before  => Package['etcd']
+    }
+
+    package { 'etcd':
+      ensure   => $etcd::package_ensure,
+      name     => $etcd::package_name,
+      source   => "/usr/src/etcd_${version}_${::architecture}.deb",
+      provider => 'dpkg'
+    }
+  }
+  else {
+    package {
+      'etcd':
+        ensure => $etcd::package_ensure,
+        name   => $etcd::package_name
+    }
   }
 }

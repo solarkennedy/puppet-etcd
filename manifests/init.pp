@@ -20,6 +20,8 @@ class etcd (
   $manage_service_file     = $etcd::params::etcd_manage_service_file,
   $package_ensure          = $etcd::params::etcd_package_ensure,
   $package_name            = $etcd::params::etcd_package_name,
+  $package_url             = $etcd::params::etcd_package_url,
+  $package_version         = $etcd::params::etcd_package_version,
   $binary_location         = $etcd::params::etcd_binary_location,
   $manage_user             = $etcd::params::etcd_manage_user,
   $user                    = $etcd::params::etcd_user,
