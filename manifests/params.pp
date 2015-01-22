@@ -16,7 +16,8 @@ class etcd::params {
   # Package settings
   $etcd_package_ensure          = 'installed'
   $etcd_package_name            = 'etcd'
-
+  $etcd_package_url             = undef
+  $etcd_package_version         = '0.4.6'
   # User settings
   $etcd_manage_user             = true
   $etcd_user                    = 'etcd'
